@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy 23rd Birthday!</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #ffc0cb, #fff, #ff6961);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+/* Envelope */
+#envelope {
+    width: 250px;
+    height: 150px;
+    background: #fff;
+    border: 3px solid #ff4d6d;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+    z-index: 2;
+    overflow: hidden;
+}
+
+/* Envelope flap */
+#flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 75px;
+    background: #ff4d6d;
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    transform-origin: top;
+    transition: transform 1s ease;
+    z-index: 3;
+}
+
+/* Envelope text */
+#envelopeText {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    color: #ff4d6d;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* Birthday message */
+#message {
+    display: none;
+    text-align: center;
+    animation: fadeIn 1s ease forwards;
+    z-index: 1;
+}
+
+#message h1 {
+    font-size: 3em;
+    color: #ff4d6d;
+    margin-bottom: 10px;
+}
+
+#decorations {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+}
+
+/* Floating decorations */
+.decor {
+    font-size: 2em;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px);}
+    100% { opacity: 1; transform: translateY(0);}
+}
+
+/* Confetti */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #FFD700;
+    top: 0;
+    animation: confettiFall 3s linear infinite;
+    opacity: 0.8;
+    z-index: 5;
+    border-radius: 50%;
+}
+
+@keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg);}
+    100% { transform: translateY(100vh) rotate(360deg);}
+}
+</style>
+</head>
+<body>
+
+<div id="envelope">
+    <div id="flap"></div>
+    <div id="envelopeText">Letter from Pookie<br>Click to Open</div>
+</div>
+
+<div id="message">
+    <h1>🎉 Happy 23rd Birthday! 🎉</h1>
+    <p>Wishing you love, laughs, and slam dunks! 🏀❤️🎂</p>
+    <div id="decorations">
+        <div class="decor">🎂</div>
+        <div class="decor">🏀</div>
+        <div class="decor">❤️</div>
+        <div class="decor">🎂</div>
+        <div class="decor">🏀</div>
+    </div>
+</div>
+
+<script>
+// Envelope open animation
+const envelope = document.getElementById('envelope');
+const flap = document.getElementById('flap');
+const message = document.getElementById('message');
+
+envelope.addEventListener('click', () => {
+    flap.style.transform = 'rotateX(-180deg)'; // open flap
+    setTimeout(() => {
+        envelope.style.display = 'none'; // hide envelope after open
+        message.style.display = 'block';   // show message
+        launchConfetti();
+    }, 1000);
+});
+
+// Confetti animation
+function launchConfetti() {
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
+        confetti.style.animationDuration = (2 + Math.random()*3) + 's';
+        document.body.appendChild(confetti);
+
+        // Remove confetti after animation
+        setTimeout(() => {
+            confetti.remove();
+        }, 5000);
+    }
+}
+</script>
+
+</body>
+</html>
