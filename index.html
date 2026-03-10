@@ -1,175 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy 23rd Birthday!</title>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to bottom, #ffc0cb, #fff, #ff6961);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    flex-direction: column;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project: Dad — Birthday Blueprint</title>
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Envelope */
-#envelope {
-    width: 250px;
-    height: 150px;
-    background: #fff;
-    border: 3px solid #ff4d6d;
-    border-radius: 10px;
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s;
-    z-index: 2;
-    overflow: hidden;
-}
+    :root {
+      --bg: #F4F1ED;
+      --fg: #212121;
+      --primary: #004E98;
+      --guide: #D1CDC4;
+      --muted: #8a8478;
+    }
 
-/* Envelope flap */
-#flap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 75px;
-    background: #ff4d6d;
-    clip-path: polygon(0 0, 50% 100%, 100% 0);
-    transform-origin: top;
-    transition: transform 1s ease;
-    z-index: 3;
-}
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'EB Garamond', serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* Envelope text */
-#envelopeText {
-    position: relative;
-    z-index: 4;
-    text-align: center;
-    color: #ff4d6d;
-    font-weight: bold;
-    padding: 10px;
-}
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .page { padding: 6rem 3rem; }
+      .layout { display: grid; grid-template-columns: 1fr 200px; gap: 4rem; }
+    }
 
-/* Birthday message */
-#message {
-    display: none;
-    text-align: center;
-    animation: fadeIn 1s ease forwards;
-    z-index: 1;
-}
+    .content { display: flex; flex-direction: column; gap: 5rem; }
+    @media (min-width: 768px) { .content { gap: 8rem; } }
 
-#message h1 {
-    font-size: 3em;
-    color: #ff4d6d;
-    margin-bottom: 10px;
-}
+    .label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
 
-#decorations {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    position: relative;
-}
+    h1 {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { h1 { font-size: 1.875rem; } }
 
-/* Floating decorations */
-.decor {
-    font-size: 2em;
-    animation: float 3s ease-in-out infinite;
-}
+    .rule { border: none; border-top: 1px solid var(--guide); margin-top: 2rem; }
 
-/* Floating animation */
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
+    .mat-row {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--guide);
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.875rem;
+    }
+    .mat-num { color: var(--muted); }
+    .mat-name { flex: 1; margin-left: 1.5rem; }
+    .mat-qty { color: var(--muted); }
 
-@keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(-20px);}
-    100% { opacity: 1; transform: translateY(0);}
-}
+    .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .spec-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+    .spec-val { font-family: 'Roboto Mono', monospace; font-size: 0.875rem; }
+    .spec-divider { grid-column: 1 / -1; border-top: 1px solid var(--guide); }
 
-/* Confetti */
-.confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: #FFD700;
-    top: 0;
-    animation: confettiFall 3s linear infinite;
-    opacity: 0.8;
-    z-index: 5;
-    border-radius: 50%;
-}
+    .message { max-width: 32rem; font-size: 1.125rem; }
+    @media (min-width: 768px) { .message { font-size: 1.25rem; } }
+    .message p { margin-bottom: 1.5rem; }
+    .sign { color: var(--primary); font-weight: 500; }
 
-@keyframes confettiFall {
-    0% { transform: translateY(-10px) rotate(0deg);}
-    100% { transform: translateY(100vh) rotate(360deg);}
-}
-</style>
+    .render-btn {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.875rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.75rem 2rem;
+      background: var(--primary);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .render-btn:hover { opacity: 0.9; }
+
+    .sidebar { display: none; }
+    @media (min-width: 768px) {
+      .sidebar { display: block; padding-top: 0.5rem; }
+      .sidebar-inner { position: sticky; top: 6rem; display: flex; flex-direction: column; gap: 4rem; }
+      .annotation {
+        padding-left: 1.5rem;
+        position: relative;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.625rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .annotation::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.35rem;
+        width: 1rem;
+        border-top: 1px solid var(--guide);
+      }
+    }
+
+    .footer {
+      border-top: 1px solid var(--guide);
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      background: rgba(33, 33, 33, 0.85);
+      cursor: pointer;
+      animation: fadeIn 0.5s ease-out;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: var(--bg);
+      padding: 3rem;
+      text-align: center;
+      max-width: 28rem;
+      width: calc(100% - 3rem);
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      cursor: default;
+    }
+    @media (min-width: 768px) { .modal-card { padding: 5rem; } }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1rem;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: var(--fg); }
+
+    .modal-subtitle {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-family: 'EB Garamond', serif;
+      font-size: 2.25rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .modal-title { font-size: 3rem; } }
+
+    .modal-line {
+      width: 3rem;
+      border: none;
+      border-top: 1px solid var(--primary);
+      margin: 1.5rem auto;
+    }
+
+    .modal-msg { font-size: 1.125rem; color: var(--muted); }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
 </head>
 <body>
-
-<div id="envelope">
-    <div id="flap"></div>
-    <div id="envelopeText">Letter from Pookie<br>Click to Open</div>
-</div>
-
-<div id="message">
-    <h1>🎉 Happy 23rd Birthday Ngwanase! 🎉</h1>
-    <p>Wishing you nothing but properity, love, more memories and definetly a BMW M4! 🏀❤️🎂</p>
-    <div id="decorations">
-        <div class="decor">🎂</div>
-        <div class="decor">🏀</div>
-        <div class="decor">❤️</div>
-        <div class="decor">🎂</div>
-        <div class="decor">🏀</div>
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal" onclick="closeModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <p class="modal-subtitle">Build Complete</p>
+      <h2 class="modal-title">Happy Birthday, Dad</h2>
+      <hr class="modal-line" />
+      <p class="modal-msg">With love, from your favourite daughter.</p>
     </div>
-</div>
+  </div>
 
-<script>
-// Envelope open animation
-const envelope = document.getElementById('envelope');
-const flap = document.getElementById('flap');
-const message = document.getElementById('message');
+  <div class="page">
+    <div class="layout">
+      <div class="content">
+        <section>
+          <p class="label">Drawing No. 001 — Rev. A</p>
+          <h1>Project: Happy Birthday Dad</h1>
+          <p class="label" style="margin-bottom:0" id="date-line"></p>
+          <hr class="rule" />
+        </section>
 
-envelope.addEventListener('click', () => {
-    flap.style.transform = 'rotateX(-180deg)'; // open flap
-    setTimeout(() => {
-        envelope.style.display = 'none'; // hide envelope after open
-        message.style.display = 'block';   // show message
-        launchConfetti();
-    }, 1000);
-});
+        <section>
+          <p class="label">Bill of Materials</p>
+          <div class="mat-row"><span class="mat-num">03</span><span class="mat-name">God &amp; Family</span><span class="mat-qty">Unconditional</span></div>
+          <div class="mat-row"><span class="mat-num">01</span><span class="mat-name">Patience</span><span class="mat-qty">∞ units</span></div>
+          <div class="mat-row"><span class="mat-num">02</span><span class="mat-name">Technical Precision</span><span class="mat-qty">Grade A</span></div>
+          <div class="mat-row"><span class="mat-num">04</span><span class="mat-name">Curiosity</span><span class="mat-qty">Boundless</span></div>
+          <div class="mat-row"><span class="mat-num">05</span><span class="mat-name">Love</span><span class="mat-qty">Structural</span></div>
+        </section>
 
-// Confetti animation
-function launchConfetti() {
-    for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
-        confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
-        confetti.style.animationDuration = (2 + Math.random()*3) + 's';
-        document.body.appendChild(confetti);
+        <section>
+          <p class="label">Technical Specifications</p>
+          <div class="specs-grid">
+            <div><p class="spec-label">Primary Function</p><p class="spec-val">Father, Builder, Problem-Solver</p></div>
+            <div><p class="spec-label">Operating System</p><p class="spec-val">Heart + Mind v.∞</p></div>
+            <div class="spec-divider"></div>
+            <div><p class="spec-label">Domains</p><p class="spec-val">IT · Carpentry · Everything Else</p></div>
+            <div><p class="spec-label">Uptime</p><p class="spec-val">24/7, 365 days</p></div>
+            <div class="spec-divider"></div>
+            <div><p class="spec-label">Load Capacity</p><p class="spec-val">Entire family, with ease</p></div>
+            <div><p class="spec-label">Tolerance</p><p class="spec-val">±0.00mm (Exceptional)</p></div>
+          </div>
+        </section>
 
-        // Remove confetti after animation
-        setTimeout(() => {
-            confetti.remove();
-        }, 5000);
+        <section>
+          <p class="label">Assembly Instructions</p>
+          <div class="message">
+            <p>Dad, you've always been the one who could look at something broken and see exactly how to make it whole again—whether it was a crashed hard drive or a creaking shelf.</p>
+            <p>You taught me that the best things in life are built with care: measure twice, cut once, and always leave room for what matters.</p>
+            <p>Your hands have written code and shaped wood with the same quiet dedication. Every project you touch carries your signature—precision, warmth, and an attention to detail that most people will never notice, but I always do.</p>
+            <p class="sign">Happy Birthday. This one's for the builder behind everything I've ever relied on.</p>
+          </div>
+        </section>
+
+        <section style="padding-bottom: 5rem;">
+          <hr class="rule" style="margin-top:0; margin-bottom:4rem;" />
+          <p class="label">Final Assembly</p>
+          <p class="message" style="margin-bottom:2rem;">Every blueprint ends with a finished piece. Press below to see what your kind of craftsmanship produces.</p>
+          <button class="render-btn" onclick="openModal()">Render Object</button>
+        </section>
+      </div>
+
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="annotation">Project Title</div>
+          <div class="annotation">Materials</div>
+          <div class="annotation">Specifications</div>
+          <div class="annotation">Assembly Note</div>
+          <div class="annotation">Final Assembly</div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">
+      This document is classified: Personal · Distribution: Family Only · With love
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('date-line').textContent =
+      'Date of Issue: ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    function openModal() {
+      document.getElementById('modal').classList.add('active');
+      var end = Date.now() + 3000;
+      (function frame() {
+        confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#004E98','#D1CDC4','#F4F1ED','#212121'] });
+        confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#004E98','#D1CDC4','#F4F1ED','#212121'] });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
     }
-}
-</script>
 
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+  </script>
 </body>
 </html>
